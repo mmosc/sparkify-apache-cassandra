@@ -21,12 +21,6 @@ In addition to the data files, there are  the following files:
 4. ```images``` folder, contaning the images for the readme and for the jupyter notebook.
 
 
-## Queries
-The database is optimised for queries of the following type:
-1. Give me the artist, song title and song's length in the music app history that was heard during sessionId = 338, and itemInSession = 4
-2. Give me only the following: name of artist, song (sorted by itemInSession) and user (first and last name) for userid = 10, sessionid = 182
-3. Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'
-
 ## ETL Pipeline and DB
 The file ```Project_1B_ Project_Template.ipynb``` includes
 1. the preprocessing of the files 
@@ -48,7 +42,35 @@ The ETL pipeline for preprocessing the files iterates over the file in the ```ev
 The image below is a screenshot of what the denormalized data look like in the event_datafile_new.csv after preprocessing.
 ![alt text](./images/image_event_datafile_new.jpg)
 
+We create a dictionary ```dct``` in order to simplify the process of filling in the tables, later on. We do not have to remember the ordering of the CSV file to access each information, but can access it via its name.
 
+### DB creation
+Three tables are created, each optimised for a query of the following type.
+#### Query 1
+**Give me the artist, song title and song's length in the music app history that was heard during sessionId = 338, and itemInSession = 4**
+For this query we create the table ```session_library``` with Apache Cassandra statements ```CREATE```. The DB consists of the following columns
+* ```sessionId``` of type```int```
+* ```itemInSession``` of type ```int```
+* ```song``` of type ```text```
+* ```artist``` of type ```text```
+* ```length``` of type ```float```
+Since the queries focus on specific ```sessionId``` and ```itemInSession```, these are chosen as PRIMARY KEY. 
+
+The table is filled in by iterating over the rows of the .CSV file, accessing the column required by using the dictionary ```dct``` and, when needed, converting the data to the required type. Then running the Apache Cassandra statements ```INSERT```. 
+
+After creating the DB, we can check that everything worked by performing the query 
+```
+SELECT  * FROM session_library 
+WHERE sessionId=338 AND itemInSession = 4
+```
+This should return 
+| sessionid         | iteminsession       | song       | artist       | length       |
+| ------------- |:-------------:|:-------------:|:-------------:|:-------------:| 
+| 338|4              |Music Matters (Mark Knight Dub)| Faithless | 495.30731201171875|
+
+2. Give me only the following: name of artist, song (sorted by itemInSession) and user (first and last name) for userid = 10, sessionid = 182
+3. Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'
+and f 
 <!-- 
 ### Song Dataset
 Sparkify song dataset (which truely is a subset of the real data from the [Million Song Dataset](http://millionsongdataset.com/)) consists of files in JSON format and contains metadata about a song and the artist of that song. The files are partitioned by the first three letters of each song's track ID. For example, here are filepaths to two files in this dataset.
