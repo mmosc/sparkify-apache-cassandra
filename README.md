@@ -60,13 +60,13 @@ The table is filled in by iterating over the rows of the .CSV file, accessing th
 
 After creating the DB, we can check that everything worked by performing the query 
 ```
-SELECT  * FROM session_library 
+SELECT  artist, song, firstname, lastname FROM session_library 
 WHERE sessionId=338 AND itemInSession = 4
 ```
 This should return 
-| sessionid         | iteminsession       | song       | artist       | length       |
-| :-------------: |:-------------:|:-------------:|:-------------:|:-------------:| 
-| 338|4              |Music Matters (Mark Knight Dub)| Faithless | 495.30731201171875|
+| song       | artist       | length       |
+| :-------------: |:-------------:|:-------------:| 
+| Faithless | Music Matters (Mark Knight Dub)| 495.30731201171875|
 
 2. Give me only the following: name of artist, song (sorted by itemInSession) and user (first and last name) for userid = 10, sessionid = 182
 For this query we create the table ```user_library``` with Apache Cassandra statements ```CREATE```. The DB consists of the following columns
@@ -87,12 +87,12 @@ SELECT artist, song, firstname, lastname,iteminsession FROM user_library \
 WHERE userId=10 AND sessionId = 182
 ```
 This should return 
-| Artist         |  song       | firstName       | lastName       | itemInSession|
-| :-------------: |:-------------:|:-------------:|:-------------:|:-------------:| 
-| Down To The Bone|Keep On Keepin' On              |Sylvie| Cruz |0| 
-| Three Drives|Greece 2000|Sylvie| Cruz |0| 
-| Sebastien Tellier|Kilometer|Sylvie| Cruz |0| 
-| Lonnie Gordon|Catch You Baby (Steve Pitron & Max Sanna Radio Edit)|Sylvie| Cruz |0|
+| Artist         |  song       | firstName       | lastName       | 
+| :-------------: |:-------------:|:-------------:|:-------------:|
+| Down To The Bone|Keep On Keepin' On              |Sylvie| Cruz | 
+| Three Drives|Greece 2000|Sylvie| Cruz |
+| Sebastien Tellier|Kilometer|Sylvie| Cruz | 
+| Lonnie Gordon|Catch You Baby (Steve Pitron & Max Sanna Radio Edit)|Sylvie| Cruz |
 
 3. Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'
 For this query we create the table ```song_library``` with Apache Cassandra statements ```CREATE```. The DB consists of the following columns
@@ -100,8 +100,7 @@ For this query we create the table ```song_library``` with Apache Cassandra stat
 * ```firstName``` of type ```text```
 * ```lastName``` of type ```text```
 * ```userId``` of type```int```
-* ```sessionId``` of type```int```
-The entries ```userId``` and ```sessionId``` are added to render the PRIMARY KEY unique for each entry. Since the queries focus on specific ```song```, this is chosen as partition key. To render the PRIMARY KEY unique, ```userId``` and ```sessionId``` are added as clustering keys. 
+The entry ```userId``` is added to render the PRIMARY KEY unique for each entry. Since the queries focus on specific ```song```, this is chosen as partition key. To render the PRIMARY KEY unique, ```userId``` is added as clustering key. 
 
 The table is filled in by iterating over the rows of the .CSV file, accessing the column required by using the dictionary ```dct``` and, when needed, converting the data to the required type. Then running the Apache Cassandra statements ```INSERT```. 
 
