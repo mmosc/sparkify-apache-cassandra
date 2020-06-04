@@ -92,11 +92,7 @@ It is organised as a start schema, that simplifies queries about user activities
 ![alt text](./sparkify_schema_2.png)
 
 The diagram is generated using [Visual Paradigm](https://online.visual-paradigm.com/diagrams/features/erd-tool/). Primary keys are in bold font. I did not manage to do-undo italics to distinguish numerical entries...
--->
-## ETL Pipeline
-The ETL pipeline that transfers data from tge set of CSV files within the directory to create a streamlined CSV file to model. Then it inserts data into Apache Cassandra tables. 
 
-<!-- 
 The ETL Pipeline is executed by running the ```etl.py``` file. It transfers data from files in two local directories into these tables in Postgres using Python and SQL. This is done by executing two similar functions, ```process_log_file``` and ```process_song_file```. The PostgreSQL queries for creating and inserting data are written out in the ```sql_queries.py``` file.
 
 ### Process Song
