@@ -13,12 +13,41 @@ event_data/2018-11-08-events.csv
 event_data/2018-11-09-events.csv
 ```
 
+## Files 
+In addition to the data files, there are  the following files:
+1. ```Project_1B_ Project_Template.ipynb```, a jupyter notebook creating the tables and testing them with queries. It is described later in more detail
+2. ```event_datafile_new.csv``` the .CSV file created by the ```Project_1B_ Project_Template.ipynb``` and collecting the data from the ```event_data``` folder
+3. ```README.md``` this readme
+4. ```images``` folder, contaning the images for the readme and for the jupyter notebook.
+
 
 ## Queries
 The database is optimised for queries of the following type:
 1. Give me the artist, song title and song's length in the music app history that was heard during sessionId = 338, and itemInSession = 4
 2. Give me only the following: name of artist, song (sorted by itemInSession) and user (first and last name) for userid = 10, sessionid = 182
 3. Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'
+
+## ETL Pipeline and DB
+The file ```Project_1B_ Project_Template.ipynb``` includes
+1. the preprocessing of the files 
+2. the creation of the DB
+3. queries for testing the DB
+### Preprocessing
+The ETL pipeline for preprocessing the files iterates over the file in the ```event_data``` folder and writes them into a .CSV table. Each row in the table contains the following information
+* artist
+* firstName of user
+* gender of user
+* item number in session
+* last name of user
+* length of the song
+* level (paid or free song)
+* location of the user
+* sessionId
+* song title
+* userId
+The image below is a screenshot of what the denormalized data look like in the event_datafile_new.csv after preprocessing.
+![alt text](./images/image_event_datafile_new.jpg)
+
 
 <!-- 
 ### Song Dataset
@@ -42,14 +71,7 @@ log_data/2018/11/2018-11-13-events.json
 And below is an example of what the data in a log file, 2018-11-12-events.json, looks like.
 ![alt text](./log-data.png)
 
-## Files 
-In addition to the data files, there are six files:
-1. ```test.ipynb``` displays the first few rows of each table to check the database.
-2. ```create_tables.py``` drops and creates the tables. It is used to reset the tables before running the ETL scripts.
-3. ```etl.ipynb``` reads and processes a single file from ```song_data``` and ```log_data``` and loads the data into the tables. This notebook contains detailed instructions on the ETL process for each of the tables.
-4. ```etl.py``` reads and processes files from ```song_data``` and ```log_data``` and loads them into the tables. It can be filled out based on the ETL notebook.
-5. ```sql_queries.py``` contains all the sql queries, and is imported into the last three files above.
-6. ```README.md``` this readme.
+
 
 
 ## Database Schema
