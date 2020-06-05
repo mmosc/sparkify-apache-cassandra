@@ -77,7 +77,7 @@ For this query we create the table ```user_library``` with Apache Cassandra stat
 * ```artist``` of type ```text```
 * ```firstName``` of type ```text```
 * ```lastName``` of type ```text```
-Since the queries focus on specific ```userId```, this is chosen as partition key. Since results must be sorted by ```sessionId```, this is chosen as clustering key. 
+Since the queries focus on specific ```(userId,sessionId)```, these are chosen as partition key. Since results must be sorted by ```itemInSession```, this is chosen as clustering key. 
 
 The table is filled in by iterating over the rows of the .CSV file, accessing the column required by using the dictionary ```dct``` and, when needed, converting the data to the required type. Then running the Apache Cassandra statements ```INSERT```. 
 
